@@ -9,6 +9,9 @@
 :root {
     --general: #5a4b90;
     --emergency: #bb2210;
+    --face: #2e7365;
+    --boss3: #4b1f93;
+    --boss5: #981005;
 
 }
 body {
@@ -118,17 +121,22 @@ body {
         background-repeat: repeat-x;
         background-size: cover;
         background-position: center;
+        background-color: var(--emergency);
         background-image: url(assets/SD/emergency.png);
             &[data-type="boss3"] {
+                background-color: var(--boss3);
                 background-image: url(assets/SD/bossfight3.png);
             }
             &[data-type="boss5"] {
+                background-color: var(--boss5);
                 background-image: url(assets/SD/bossfight5.png);
             }
             &[data-type="face"] {
+                background-color: var(--face);
                 background-image: url(assets/SD/face.png);
             }
             &[data-type="egg"]:not(:has(input#emergency:checked)) {
+                background-color: var(--general);
                 background-image: url(assets/SD/non-emergency.png);
         }
         > .counter-label {
