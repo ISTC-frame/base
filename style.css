@@ -118,18 +118,18 @@ body {
         background-repeat: repeat-x;
         background-size: cover;
         background-position: center;
-        background-image: url(https://sm.ms/image/MHfC3PW1hwIj2OD);
+        background-image: url(assets/SD/emergency.png);
             &[data-type="boss3"] {
-                background-image: url(https://sm.ms/image/r4185FlHiGeTd3Z);
+                background-image: url(assets/SD/bossfight3.png);
             }
             &[data-type="boss5"] {
-                background-image: url(https://sm.ms/image/oGlUCVWa2s7qx4K);
+                background-image: url(assets/SD/bossfight5.png);
             }
             &[data-type="face"] {
-                background-image: url(https://sm.ms/image/3O42bTGVlXwNFoe);
+                background-image: url(assets/SD/face.png);
             }
             &[data-type="egg"]:not(:has(input#emergency:checked)) {
-                background-image: url(https://sm.ms/image/PqBVHXbTE2uFCZW);
+                background-image: url(assets/SD/non-emergency.png);
         }
         > .counter-label {
             backdrop-filter: blur(1rem) brightness(3) contrast(0.8);
