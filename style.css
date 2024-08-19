@@ -115,7 +115,6 @@ body {
     padding: .4rem;
     min-width: 12rem;
     &.checked {
-        background-color: #000;
         color: #fff;
         text-shadow: 0 0 3px BLACK, 0 0 3px BLACK, 0 0 3px BLACK, 0 0 6px BLACK, 0 0 6px BLACK;
         background-repeat: repeat-x;
