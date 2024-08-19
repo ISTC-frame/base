@@ -190,7 +190,7 @@ function getCheck() {
             baseScore: 0,
             conditions: {
                 '混乱': 20,
-                '无漏': 50
+                '无漏': 30
             }
         },
         {
@@ -200,7 +200,7 @@ function getCheck() {
                 '金融': 20,
                 '奇观': 20,
                 '拥挤': 20,
-                '混乱': 20,
+                '混乱': 30,
                 '无漏': 50
             }
         },
@@ -258,60 +258,39 @@ function getCheck() {
         }
     ];
     const checkedNodes = document.querySelectorAll('div.checked');
-    const checkInfo = [];
-    
-    checkedNodes.forEach(node => {
+    const checkInfo = Array.from(checkedNodes).map(node => {
         const counterLabel = node.querySelector('.counter-label');
         const counterValue = counterLabel ? parseInt(counterLabel.textContent, 10) : 1;
-    
-        const checkboxes = node.querySelectorAll('input[type="checkbox"]');
-        const checkboxStates = Array.from(checkboxes).map(checkbox => ({
+        const checkboxStates = Array.from(node.querySelectorAll('input[type="checkbox"]')).map(checkbox => ({
             id: checkbox.id,
             value: checkbox.value,
             checked: checkbox.checked
         }));
-    
         const checknameSpan = node.querySelector('span.checkname');
         const checkname = checknameSpan ? checknameSpan.textContent.trim() : 'defaultCheckname';
-    
-        checkInfo.push({
-            counterValue: counterValue,
-            checkboxStates: checkboxStates,
-            checkname: checkname
-        });
+        return { counterValue, checkboxStates, checkname };
     });
-    
     function calcChBonus(checkInfo) {
         return function() {
-            let totalBonus = 0;
-    
-            checkInfo.forEach(item => {
+            return checkInfo.reduce((totalBonus, item) => {
                 const bonusItem = bonusKey.find(b => b.name === item.checkname);
-                if (!bonusItem) return;
-    
+                if (!bonusItem) return totalBonus;
                 let itemBonus = bonusItem.baseScore;
                 let noLeakBonus = 0;
-    
                 item.checkboxStates.forEach(checkbox => {
                     if (checkbox.checked) {
                         if (checkbox.id === 'era') {
-                            const values = checkbox.value.split('/');
-                            let maxConditionValue = 0;
-                            values.forEach(value => {
-                                if (bonusItem.conditions[value] && bonusItem.conditions[value] > maxConditionValue) {
-                                    maxConditionValue = bonusItem.conditions[value];
-                                }
-                            });
+                            const maxConditionValue = Math.max(...checkbox.value.split('/').map(value => bonusItem.conditions[value] || 0));
                             itemBonus += maxConditionValue;
-                        } else if (checkbox.id === 'chaos' || checkbox.id === 'no-leak' || checkbox.id === 'emergency') {
-                            itemBonus += bonusItem.conditions[checkbox.value] || 0;
+                        } else if (['chaos', 'no-leak', 'emergency'].includes(checkbox.id)) {
+                            const conditionBonus = bonusItem.conditions[checkbox.value] || 0;
+                            itemBonus += conditionBonus;
                             if (checkbox.id === 'no-leak') {
-                                noLeakBonus = bonusItem.conditions[checkbox.value] || 0;
+                                noLeakBonus = conditionBonus;
                             }
                         }
                     }
                 });
-    
                 if (item.checkname === '鸭速公路') {
                     totalBonus += itemBonus * item.counterValue;
                     if (noLeakBonus > 0) {
@@ -320,12 +299,10 @@ function getCheck() {
                 } else {
                     totalBonus += itemBonus;
                 }
-            });
-    
-            return totalBonus;
+                return totalBonus;
+            }, 0);
         };
     }
-    
     const calculateBonus = calcChBonus(checkInfo);
     return calculateBonus();
 }
@@ -416,12 +393,11 @@ function getWeight() {
     });
 
     if (ewStatus === -1) {
-        return totalWeight * 0.8;
+        totalWeight *= 0.8;
     } else if (ewStatus === 1) {
-        return totalWeight + weightKey[Object.keys(weightKey).pop()];
-    } else {
-        return totalWeight;
+        totalWeight += weightKey[Object.keys(weightKey).pop()];
     }
+    return Number(totalWeight).toFixed(4);
 }
 function calcBonus() {
     let originScore = parseFloat(document.getElementById('origin-score').value);

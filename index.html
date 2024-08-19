@@ -406,6 +406,21 @@
         </div>
     </div>
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const ewRadio = document.querySelectorAll('input[name="wishdale"]');
+            const banSelect = document.getElementById('ban-select');
+            const DSbox = document.getElementById('doctor-silver');
+            function updateDS() {
+                const isThirdOptionSelected = document.getElementById('option-yee').checked;
+                banSelect.selectedIndex = 0;
+                banSelect.disabled = isThirdOptionSelected;
+                DSbox.disabled = isThirdOptionSelected;
+            }
+            ewRadio.forEach(radio => {
+                radio.addEventListener('change', updateDS);
+            });
+            updateDS();
+        });
         document.addEventListener('DOMContentLoaded', () => {
             const bossfight = document.querySelector('.bossfight');
             const checks = bossfight.querySelectorAll('.check');
@@ -418,7 +433,7 @@
             });
         });
         const banSelect = document.getElementById('ban-select');
-        const doctorSilverCheckbox = document.getElementById('doctor-silver');
+        const DSbox = document.getElementById('doctor-silver');
         const allCheckboxes = document.querySelectorAll('.ban-weight input[type="checkbox"]');
 
         function updateBan() {
@@ -426,7 +441,7 @@
             allCheckboxes.forEach(checkbox => {
                 if (checkbox.id !== 'doctor-silver') {
                     if (checkbox.id === selectedValue) {
-                        if (!doctorSilverCheckbox.checked) {
+                        if (!DSbox.checked) {
                             checkbox.checked = false;
                             checkbox.disabled = true;
                         } else {
@@ -441,14 +456,14 @@
 
         banSelect.addEventListener('change', updateBan);
 
-        doctorSilverCheckbox.addEventListener('change', function() {
+        DSbox.addEventListener('change', function() {
             updateBan();
         });
 
         allCheckboxes.forEach(checkbox => {
             if (checkbox.id !== 'doctor-silver') {
                 checkbox.addEventListener('change', function() {
-                    if (checkbox.id === banSelect.value && !doctorSilverCheckbox.checked) {
+                    if (checkbox.id === banSelect.value && !DSbox.checked) {
                         checkbox.checked = false;
                         checkbox.disabled = true;
                     }

@@ -6,6 +6,13 @@
 
     src: url('assets/fonts/Bender.otf') format('opentype');
 }
+@font-face {
+    font-family: 'Huiwen_Ming';
+    font-weight: normal;
+    font-style: normal;
+
+    src: url(assets/Huiwen-Ming.otf) format('opentype');
+}
 :root {
     --general: #5a4b90;
     --emergency: #bb2210;
@@ -114,38 +121,55 @@ body {
     box-shadow: 0 0 0 2px #333;
     padding: .4rem;
     min-width: 12rem;
-    &.checked {
-        color: #fff;
-        text-shadow: 0 0 3px BLACK, 0 0 3px BLACK, 0 0 3px BLACK, 0 0 6px BLACK, 0 0 6px BLACK;
+    color: #000;
+    text-shadow: 0 0 3px transparent, 0 0 3px transparent, 0 0 3px transparent, 0 0 6px transparent, 0 0 6px transparent;
+    transition: text-shadow 0s,opacity 0.3s, color 0.3s;
+    &::before {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        z-index: -1;
+        opacity: 0;
         background-repeat: repeat-x;
         background-size: cover;
         background-position: center;
         background-color: var(--emergency);
         background-image: url(assets/SD/emergency.png);
-            &[data-type="boss3"] {
-                background-color: var(--boss3);
-                background-image: url(assets/SD/bossfight3.png);
-            }
-            &[data-type="boss5"] {
-                background-color: var(--boss5);
-                background-image: url(assets/SD/bossfight5.png);
-            }
-            &[data-type="face"] {
-                background-color: var(--face);
-                background-image: url(assets/SD/face.png);
-            }
-            &[data-type="egg"]:not(:has(input#emergency:checked)) {
-                background-color: var(--general);
-                background-image: url(assets/SD/non-emergency.png);
-        }
-        > .counter-label {
-            backdrop-filter: blur(1rem) brightness(3) contrast(0.8);
-            color: #000;
-            text-shadow: 0 0 2px white,0 0 2px white !important;
+    }
+    &[data-type="boss3"]::before {
+        background-color: var(--boss3);
+        background-image: url(assets/SD/bossfight3.png);
+    }
+    &[data-type="boss5"]::before {
+        background-color: var(--boss5);
+        background-image: url(assets/SD/bossfight5.png);
+    }
+    &[data-type="face"]::before {
+        background-color: var(--face);
+        background-image: url(assets/SD/face.png);
+    }
+    &[data-type="egg"]:not(:has(input#emergency:checked))::before {
+        background-color: var(--general);
+        background-image: url(assets/SD/non-emergency.png);
+    }
+    &.checked{
+        color: #fff;
+        text-shadow: 0 0 3px black, 0 0 3px black, 0 0 3px black, 0 0 6px black, 0 0 6px black;
+        transition: text-shadow 0.1s,opacity 0.3s, color 0.3s;
+        &::before {
+            opacity: 1;
         }
     }
+    > .counter-label {
+        backdrop-filter: blur(1rem) brightness(3) contrast(0.8);
+        color: #000;
+        text-shadow: 0 0 2px white,0 0 2px white !important;
+    }
     > span.checkname {
-        font-family: 'bender', sans-serif;
+        font-family: 'Huiwen_Ming','bender', sans-serif;
         font-size: 1.1rem;
         font-weight: bold;
     }
