@@ -1,6 +1,5 @@
 var $ = {
     q: (e) => document.querySelector(e),
-    qa: (e) => document.querySelectorAll(e),
     l: (e, s = document, ...h) => {
         s.addEventListener(e, (event) => {
             h.forEach(h => h(event));
@@ -307,7 +306,6 @@ function getCheck() {
     return calculateBonus();
 }
 function getOperation() {
-
     const operationDiv = document.querySelector('div.operation');
     const inputs = operationDiv.querySelectorAll('input');
     const operationInfo = Array.from(inputs).slice(0, 3).map(input => ({

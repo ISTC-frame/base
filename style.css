@@ -23,9 +23,52 @@
 }
 body {
     font-family: 'Bender', 'Noto Serif SC', serif;
+    color: #fff;
     margin: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    background-image: url(assets/bg.jpg);
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
 }
-#calculator {  display: grid;
+::-webkit-scrollbar {
+    display: none;
+}
+::-webkit-scrollbar-thumb {
+    background-color: transparent;
+    border-radius: 6px;
+    transition: background-color 0.3s;
+}
+#bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -2;
+    background-image: url(assets/arch-bridge.png);
+    background-position: center;
+    background-size: 20%;
+    background-repeat: no-repeat;
+    &::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url(assets/border.png);
+        background-position: center;
+        background-size: 200%;
+        background-repeat: no-repeat;
+        z-index: -1;
+}
+}
+#calculator {
+    position: relative;
+    display: grid;
     grid-template-columns: 1.3fr 0.7fr;
     grid-template-rows: 1fr;
     grid-auto-columns: 1fr;
@@ -36,7 +79,7 @@ body {
       "key multiplier";
     margin: 2vh 4vw 0;
     user-select: none;
-  }
+}
   .key {  display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: 0.1fr 5fr 0.1fr;
@@ -62,6 +105,10 @@ body {
       "conduction"
       "operation";
     grid-area: bonus;
+    box-shadow: 0 0 0px 2px #333;
+
+    max-height: 90vh;
+    overflow-y: scroll;
   }
   .level3 { grid-area: level3; }
   .level4 { grid-area: level4; }
@@ -111,6 +158,7 @@ body {
     display: flex;
 }
 .check {
+    cursor: pointer;
     position: relative;
     flex: 1;
     display: flex;
@@ -124,6 +172,20 @@ body {
     color: #000;
     text-shadow: 0 0 3px transparent, 0 0 3px transparent, 0 0 3px transparent, 0 0 6px transparent, 0 0 6px transparent;
     transition: text-shadow 0s,opacity 0.3s, color 0.3s;
+    &::after {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        z-index: -2;
+        opacity: 1;
+        background: #fff8;
+        backdrop-filter: blur(1rem);
+        transition: opacity 0s;
+    }
+
     &::before {
         content: '';
         position: absolute;
@@ -133,6 +195,7 @@ body {
         left: 0;
         z-index: -1;
         opacity: 0;
+        transition: opacity 0.3s;
         background-repeat: repeat-x;
         background-size: cover;
         background-position: center;
@@ -159,7 +222,12 @@ body {
         color: #fff;
         text-shadow: 0 0 3px black, 0 0 3px black, 0 0 3px black, 0 0 6px black, 0 0 6px black;
         transition: text-shadow 0.1s,opacity 0.3s, color 0.3s;
+        &::after {
+            transition: opacity 0.3s;
+            opacity: 0;
+        }
         &::before {
+            transition: opacity 0.3s;
             opacity: 1;
         }
     }
@@ -285,12 +353,12 @@ body {
     grid-area: user-input;
     display: flex;
     height: fit-content;
-    outline: 2px solid #000;
-    box-shadow: inset 0 0 0 2px #000;
+    outline: 2px solid #333;
+    box-shadow: inset 0 0 0 2px #333;
 }
 .user {
     background: #333;
-    outline: px solid #000;
+    outline: px solid #333;
     color: #fff;
     min-width: 6rem;
     font-size: 1.2rem;
@@ -317,8 +385,8 @@ label {
     font-size: 1rem;
     padding: 0 .4rem 0 0;
     cursor: pointer;
-    outline: 2px solid #000;
-    box-shadow: inset 0 0 0 2px #000;
+    outline: 2px solid #333;
+    box-shadow: inset 0 0 0 2px #333;
     > input {
         width: 50%;
     }

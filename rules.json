@@ -183,5 +183,27 @@
             "baseScore": 10,
             "conditions": {}
         }
+    ],
+    "specialBonus": [
+        { "name": "duck", "point": 10 },
+        { "name": "bear", "point": 10 },
+        { "name": "dog", "point": 10 },
+        { "name": "mouse", "point": 10 },
+        { "name": "six-star", "point": 50 },
+        { "name": "five-star", "point": 20 },
+        { "name": "four-star", "point": 10 }
+    ],
+    "weightKey": [
+        { "name": "逻各斯", "weight": 0.05 },
+        { "name": "麒麟R夜刀", "weight": 0.05 },
+        { "name": "傀影", "weight": 0.05 },
+        { "name": "阿斯卡纶", "weight": 0.05 },
+        { "name": "纯烬艾雅法拉", "weight": 0.03 },
+        { "name": "塑心", "weight": 0.03 },
+        { "name": "凯尔希", "weight": 0.03 },
+        { "name": "伊内丝", "weight": 0.03 },
+        { "name": "乌尔比安", "weight": 0.03 },
+        { "name": "妮芙", "weight": 0.03 },
+        { "name": "维什戴尔", "weight": 0.0711 }
     ]
 }
