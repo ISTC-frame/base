@@ -9,34 +9,36 @@
     <script src="h2c.js"></script>
 </head>
 <body>
+    <div id="topbar">
+        <div class="logo"></div>
+        <div class="title"></div>
+    </div>
     <div id="bg"></div>
     <div id="calculator">
         <div class="key">
             <div id="user-input">
-                <div class="user">玩家信息</div>
-                <div class="user-info">
-                    <div class="username">
-                        <label for="username">用户名称：</label>
-                        <input type="text" id="username">
-                    </div>
-                    <div class="username">
-                        <label for="userteam">使用分队：</label>
-                        <select id="userteam">
-                            <option value="option">因地制宜分队</option>
-                            <option value="option">魂灵护送分队</option>
-                            <option value="option">博闻广记分队</option>
-                            <option value="option">指挥分队</option>
-                            <option value="option">集群分队</option>
-                            <option value="option">后勤分队</option>
-                            <option value="option">矛头分队</option>
-                            <option value="option">突击战术分队</option>
-                            <option value="option">堡垒战术分队</option>
-                            <option value="option">远程战术分队</option>
-                            <option value="option">破坏战术分队</option>
-                            <option value="option">高规格分队</option>
-                            <option value="special">蓝图♿♿♿♿</option>
-                        </select>
-                    </div>
+                <div class="username">
+                    <label for="username">玩家名称</label>
+                    <input type="text" id="username" placeholder="请输入用户名">
+                </div>
+                <div class="userteam">
+                    <label for="userteam">使用分队</label>
+                    <select id="userteam">
+                        <option value="none">点击选择</option>
+                        <option value="option">因地制宜分队</option>
+                        <option value="option">魂灵护送分队</option>
+                        <option value="option">博闻广记分队</option>
+                        <option value="option">指挥分队</option>
+                        <option value="option">集群分队</option>
+                        <option value="option">后勤分队</option>
+                        <option value="option">矛头分队</option>
+                        <option value="option">突击战术分队</option>
+                        <option value="option">堡垒战术分队</option>
+                        <option value="option">远程战术分队</option>
+                        <option value="option">破坏战术分队</option>
+                        <option value="option">高规格分队</option>
+                        <option value="special">蓝图♿♿♿♿</option>
+                    </select>
                 </div>
             </div>
             <div id="bonus">
@@ -299,6 +301,15 @@
                         <span class="counter-label">0</span>
                     </div>
                     <div class="counter-box four-star" onclick="increment(this)" oncontextmenu="decrement(this, e); return false;">
+                        <span class="counter-label">0</span>
+                    </div>
+                </div>
+                <div class="limited-check">
+                    <div class="counter-box beyond" onclick="increment(this, event)" oncontextmenu="decrement(this, event); return false;">
+                        <span class="counter-label">0</span>
+                        <span class="depth-label">0</span>
+                    </div>
+                    <div class="counter-box crowd" onclick="increment(this)" oncontextmenu="decrement(this, e); return false;">
                         <span class="counter-label">0</span>
                     </div>
                 </div>

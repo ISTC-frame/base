@@ -56,9 +56,16 @@ function increment(el, e) {
         e.preventDefault();
         e.stopPropagation();
     }
-    const label = el.querySelector('.counter-label');
-    if (label) {
-        label.textContent = parseInt(label.textContent) + 1;
+    if (e && e.shiftKey) {
+        const depthLabel = el.querySelector('.depth-label');
+        if (depthLabel) {
+            depthLabel.textContent = parseInt(depthLabel.textContent) + 1;
+        }
+    } else {
+        const counterLabel = el.querySelector('.counter-label');
+        if (counterLabel) {
+            counterLabel.textContent = parseInt(counterLabel.textContent) + 1;
+        }
     }
 }
 function decrement(el, e) {
@@ -66,9 +73,29 @@ function decrement(el, e) {
         e.preventDefault();
         e.stopPropagation();
     }
-    const label = el.querySelector('.counter-label');
-    if (label && parseInt(label.textContent) > 0) {
-        label.textContent = parseInt(label.textContent) - 1;
+    if (e && e.shiftKey) {
+        const depthLabel = el.querySelector('.depth-label');
+        if (depthLabel && parseInt(depthLabel.textContent) > 0) {
+            depthLabel.textContent = parseInt(depthLabel.textContent) - 1;
+        }
+    } else {
+        const counterLabel = el.querySelector('.counter-label');
+        if (counterLabel && parseInt(counterLabel.textContent) > 0) {
+            counterLabel.textContent = parseInt(counterLabel.textContent) - 1;
+        }
+    }
+}
+function inHole() {
+    const limitedCheck = $.q('.limited-check');
+    if (limitedCheck) {
+        $.c('div', `
+            <span class="counter-label">0</span>
+            <span class="depth-label">0</span>
+        `, limitedCheck, null, {
+            class: 'counter-box beyond',
+            onclick: 'increment(this, event)',
+            oncontextmenu: 'decrement(this, event); return false;'
+        });
     }
 }
 function getCheck() {
