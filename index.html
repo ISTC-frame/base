@@ -305,14 +305,18 @@
                     </div>
                 </div>
                 <div class="limited-check">
+                    <div class="counter-box crowd" onclick="increment(this)" oncontextmenu="decrement(this, e); return false;">
+                        <span class="counter-label">0</span>
+                    </div>
                     <div class="counter-box beyond" onclick="increment(this, event)" oncontextmenu="decrement(this, event); return false;">
                         <span class="counter-label">0</span>
                         <span class="depth-label">0</span>
                     </div>
-                    <div class="counter-box crowd" onclick="increment(this)" oncontextmenu="decrement(this, e); return false;">
-                        <span class="counter-label">0</span>
-                    </div>
                 </div>
+                <button onclick="inHole()" style="
+                margin: 0.5rem auto 0;
+                display: block;
+            ">新增树洞</button>
             </div>
             <div class="limitation">
                 <div id="ban">

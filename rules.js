@@ -361,21 +361,28 @@ function getSpecial() {
         'mouse': 10,
         'six-star': 50,
         'five-star': 20,
-        'four-star': 10
+        'four-star': 10,
+        'crowd': 15,
+        'beyond': 20,
     };
     const fortuneElement = document.querySelector('.fortune');
     const counterBoxes = fortuneElement.querySelectorAll('.counter-box');
     const specialInfo = [];
+    console.log(specialInfo);
 
     counterBoxes.forEach(counterBox => {
         const secondClass = counterBox.classList[1];
-        const counterLabel = counterBox.querySelector('span.counter-label').textContent;
-        specialInfo.push({ class: secondClass, value: parseInt(counterLabel, 10) });
+        const counterLabel = parseInt(counterBox.querySelector('span.counter-label').textContent, 10);
+        const depthLabel = parseInt(counterBox.querySelector('span.depth-label')?.textContent || 0, 10);
+        specialInfo.push({ class: secondClass, value: counterLabel, depth: depthLabel });
     });
 
     const calcSpBonus = (function() {
         return function(specialInfo) {
             return specialInfo.reduce((total, item) => {
+                if (item.class === 'beyond') {
+                    return total + (item.value * bonusKey[item.class] * item.depth);
+                }
                 return total + (bonusKey[item.class] * item.value);
             }, 0);
         };
@@ -428,11 +435,11 @@ function calcBonus() {
     let originScore = parseFloat(document.getElementById('origin-score').value);
     let checkBonus = getCheck();
     let operationBonus = getOperation();
-    let specialInfo = getSpecial();
+    let specialBonus = getSpecial();
     let weight = getWeight();
 
-    let finalScore = (originScore + checkBonus + operationBonus + specialInfo) * weight;
-    let outputScore =`最终分数：(${originScore} + ${checkBonus} + ${operationBonus} + ${specialInfo}) * ${weight} = ${finalScore}`;
-    console.log(`最终分数：(${originScore} + ${checkBonus} + ${operationBonus} + ${specialInfo}) * ${weight} = ${finalScore}`);
+    let finalScore = (originScore + checkBonus + operationBonus + specialBonus) * weight;
+    let outputScore =`最终分数：(${originScore} + ${checkBonus} + ${operationBonus} + ${specialBonus}) * ${weight} = ${finalScore}`;
+    //console.log(`最终分数：(${originScore} + ${checkBonus} + ${operationBonus} + ${specialBonus}) * ${weight} = ${finalScore}`);
     $.q('.final-score').textContent = outputScore;
 }

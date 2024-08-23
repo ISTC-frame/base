@@ -35,6 +35,9 @@ body {
     height: 100vh;
     overflow: hidden;
 }
+h2 {
+    margin: .5rem 0;
+}
 ::-webkit-scrollbar {
     display: none;
 }
@@ -515,5 +518,6 @@ input[type="checkbox"] + label {
 
 /* 勾选后的复选框样式 */
 input[type="checkbox"]:checked + label {
-    color: #eee2b8
+    color: #eee2b8;
+    text-shadow: 0 0 4px black,0 0 4px black,0 0 4px black;
 }
