@@ -1,5 +1,6 @@
 var $ = {
     q: (e) => document.querySelector(e),
+    qa: (e) => document.querySelectorAll(e),
     l: (e, s = document, ...h) => {
         s.addEventListener(e, (event) => {
             h.forEach(h => h(event));
@@ -59,12 +60,20 @@ function increment(el, e) {
     if (e && e.shiftKey) {
         const depthLabel = el.querySelector('.depth-label');
         if (depthLabel) {
-            depthLabel.textContent = parseInt(depthLabel.textContent) + 1;
+            const maxDepth = depthLabel.getAttribute('data-max');
+            const currentDepth = parseInt(depthLabel.textContent);
+            if (!maxDepth || currentDepth < parseInt(maxDepth)) {
+                depthLabel.textContent = currentDepth + 1;
+            }
         }
     } else {
         const counterLabel = el.querySelector('.counter-label');
         if (counterLabel) {
-            counterLabel.textContent = parseInt(counterLabel.textContent) + 1;
+            const maxCounter = counterLabel.getAttribute('data-max');
+            const currentCounter = parseInt(counterLabel.textContent);
+            if (!maxCounter || currentCounter < parseInt(maxCounter)) {
+                counterLabel.textContent = currentCounter + 1;
+            }
         }
     }
 }
@@ -85,6 +94,41 @@ function decrement(el, e) {
         }
     }
 }
+function selectAll(button) {
+    const container = button.closest('.ban-weight');
+    const checkboxes = container.querySelectorAll('input[type="checkbox"]');
+    checkboxes.forEach(checkbox => {
+        checkbox.checked = true;
+    });
+}
+function deselectAll(button) {
+    const container = button.closest('.ban-weight');
+    const checkboxes = container.querySelectorAll('input[type="checkbox"]');
+    checkboxes.forEach(checkbox => {
+        checkbox.checked = !checkbox.checked;
+    });
+}
+function updateBG() {
+    const levels = document.querySelectorAll('[class^="level"]');
+    let highestCheckedLevel = 0;
+
+    levels.forEach(level => {
+        const checkedDivs = level.querySelectorAll('div.checked');
+        const levelClass = level.className.match(/\d+/);
+
+        if (levelClass && checkedDivs.length > 0) {
+            const levelNumber = parseInt(levelClass[0], 10);
+            if (levelNumber > highestCheckedLevel) {
+                highestCheckedLevel = levelNumber;
+            }
+        }
+    });
+
+    if (highestCheckedLevel > 0) {
+        const editor = document.getElementById('bg');
+        editor.style.backgroundImage = `url('assets/HD/bg_zone_${highestCheckedLevel}.png')`;
+    }
+}
 function inHole() {
     const limitedCheck = $.q('.limited-check');
     if (limitedCheck) {
@@ -96,6 +140,15 @@ function inHole() {
             onclick: 'increment(this, event)',
             oncontextmenu: 'decrement(this, event); return false;'
         });
+    }
+}
+function outHole() {
+    const limitedCheck = $.q('.limited-check');
+    if (limitedCheck) {
+        const counterBox = limitedCheck.querySelector('.counter-box.beyond');
+        if (counterBox) {
+            limitedCheck.removeChild(counterBox);
+        }
     }
 }
 function getCheck() {
@@ -364,6 +417,7 @@ function getSpecial() {
         'four-star': 10,
         'crowd': 15,
         'beyond': 20,
+        'babel': 20,
     };
     const fortuneElement = document.querySelector('.fortune');
     const counterBoxes = fortuneElement.querySelectorAll('.counter-box');
@@ -406,6 +460,7 @@ function getWeight() {
     };
     let totalWeight = 1;
     let ewStatus = 0;
+    let checkedStatus = document.querySelector('.bossfight').querySelectorAll('div.checked').length > 0;
     const allSelections = Array.from(document.querySelectorAll('.ban-weight input[type="checkbox"], .ban-weight select, .ban-weight input[type="radio"]'))
         .map(element => ({
             id: element.id,
@@ -428,6 +483,9 @@ function getWeight() {
         totalWeight *= 0.8;
     } else if (ewStatus === 1) {
         totalWeight += weightKey[Object.keys(weightKey).pop()];
+    }
+    if (!checkedStatus) {
+        return ewStatus === -1 ? '0.8000' : '1.0000';
     }
     return Number(totalWeight).toFixed(4);
 }

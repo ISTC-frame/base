@@ -236,7 +236,7 @@
                         </div>
                         <div class="check" data-type="egg">
                             <span class="checkname">鸭速公路</span>
-                            <span class="counter-label">0</span>
+                            <span class="counter-label" data-max="4">0</span>
                             <span class="type">
                                 <input type="checkbox" value="紧急" id="emergency" checked disabled>
                                 <label for="emergency">紧急</label>
@@ -260,25 +260,25 @@
                 <div class="operation">
                     <div id="withdrawal">
                         <div></div>
-                        <label for="money-get">取钱数量：</label>
-                        <input type="number" id="m-count" value="0">
+                        <label for="money-get">取钱数量</label>
+                        <input type="number" id="m-count" placeholder="0">
                     </div>
                     <div id="emergentbattle">
                         <div></div>
-                        <label for="collection-amount">紧急数量：</label>
-                        <input type="number" id="eb-count" value="0">
+                        <label for="collection-amount">紧急数量</label>
+                        <input type="number" id="eb-count" placeholder="0">
                     </div>
                     <div id="collection">
                         <div></div>
-                        <label for="collection-amount">藏品数量：</label>
-                        <input type="number" id="c-count" value="0">
+                        <label for="collection-amount">藏品数量</label>
+                        <input type="number" id="c-count" placeholder="0">
                     </div>
                 </div>
             </div>
         </div>
         <div class="multiplier">
             <div class="fortune">
-                <h2>特殊加分</h2>
+                <h2>特殊加分与权重</h2>
                 <div class="special-enemy">
                     <div class="counter-box duck" onclick="increment(this)" oncontextmenu="decrement(this, e); return false;">
                         <span class="counter-label">0</span>
@@ -308,19 +308,21 @@
                     <div class="counter-box crowd" onclick="increment(this)" oncontextmenu="decrement(this, e); return false;">
                         <span class="counter-label">0</span>
                     </div>
+                    <div class="counter-box babel" onclick="increment(this)" oncontextmenu="decrement(this, e); return false;">
+                        <span class="counter-label" data-max="1">0</span>
+                    </div>
                     <div class="counter-box beyond" onclick="increment(this, event)" oncontextmenu="decrement(this, event); return false;">
                         <span class="counter-label">0</span>
                         <span class="depth-label">0</span>
                     </div>
                 </div>
-                <button onclick="inHole()" style="
-                margin: 0.5rem auto 0;
-                display: block;
-            ">新增树洞</button>
+                <div class="no-wrap">
+                    <button onclick="inHole()">新增树洞</button>
+                    <button onclick="outHole()">移除树洞</button>
+                </div>
             </div>
             <div class="limitation">
                 <div id="ban">
-                <h2>ban位</h2>
                     <div class="ban-weight">
                         <label>维什戴尔招募情况：</label>
                         <div>
@@ -356,50 +358,60 @@
                             <label for="doctor-silver">未招募</label>
                         </div>
                     </div>
-                    <div class="ban-weight">
-                        <label>5%权重ban位：</label>
-                        <div>
-                            <input type="checkbox" id="逻各斯" name="逻各斯">
-                            <label for="逻各斯">逻各斯</label>
+                    <div class="leverage" style="display: flex; justify-content: space-around;">
+                        <div class="ban-weight" style="display: flex; flex-direction: column;">
+                            <div class="no-wrap">
+                                <label>5%权重BAN位：</label>
+                                <button onclick="selectAll(this)">全</button>
+                                <button onclick="deselectAll(this)">反</button>
+                            </div>
+                            <div>
+                                <input type="checkbox" id="逻各斯" name="逻各斯">
+                                <label for="逻各斯">逻各斯</label>
+                            </div>
+                            <div>
+                                <input type="checkbox" id="麒麟R夜刀" name="麒麟R夜刀">
+                                <label for="麒麟R夜刀">麒麟R夜刀</label>
+                            </div>
+                            <div>
+                                <input type="checkbox" id="傀影" name="傀影">
+                                <label for="傀影">傀影</label>
+                            </div>
+                            <div>
+                                <input type="checkbox" id="阿斯卡纶" name="阿斯卡纶">
+                                <label for="阿斯卡纶">阿斯卡纶</label>
+                            </div>
                         </div>
-                        <div>
-                            <input type="checkbox" id="麒麟R夜刀" name="麒麟R夜刀">
-                            <label for="麒麟R夜刀">麒麟R夜刀</label>
-                        </div>
-                        <div>
-                            <input type="checkbox" id="傀影" name="傀影">
-                            <label for="傀影">傀影</label>
-                        </div>
-                        <div>
-                            <input type="checkbox" id="阿斯卡纶" name="阿斯卡纶">
-                            <label for="阿斯卡纶">阿斯卡纶</label>
-                        </div>
-                    </div>
-                    <div class="ban-weight">
-                        <label>3%权重ban位：</label>
-                        <div>
-                            <input type="checkbox" id="纯烬艾雅法拉" name="纯烬艾雅法拉">
-                            <label for="纯烬艾雅法拉">纯烬艾雅法拉</label>
-                        </div>
-                        <div>
-                            <input type="checkbox" id="塑心" name="塑心">
-                            <label for="塑心">塑心</label>
-                        </div>
-                        <div>
-                            <input type="checkbox" id="凯尔希" name="凯尔希">
-                            <label for="凯尔希">凯尔希</label>
-                        </div>
-                        <div>
-                            <input type="checkbox" id="伊内丝" name="伊内丝">
-                            <label for="伊内丝">伊内丝</label>
-                        </div>
-                        <div>
-                            <input type="checkbox" id="乌尔比安" name="乌尔比安">
-                            <label for="乌尔比安">乌尔比安</label>
-                        </div>
-                        <div>
-                            <input type="checkbox" id="妮芙" name="妮芙">
-                            <label for="妮芙">妮芙</label>
+                        <div class="ban-weight" style="display: flex; flex-direction: column;">
+                            <div class="no-wrap">
+                                <label>5%权重BAN位：</label>
+                                <button onclick="selectAll(this)">全</button>
+                                <button onclick="deselectAll(this)">反</button>
+                            </div>
+                            <div>
+                                <input type="checkbox" id="纯烬艾雅法拉" name="纯烬艾雅法拉">
+                                <label for="纯烬艾雅法拉">纯烬艾雅法拉</label>
+                            </div>
+                            <div>
+                                <input type="checkbox" id="塑心" name="塑心">
+                                <label for="塑心">塑心</label>
+                            </div>
+                            <div>
+                                <input type="checkbox" id="凯尔希" name="凯尔希">
+                                <label for="凯尔希">凯尔希</label>
+                            </div>
+                            <div>
+                                <input type="checkbox" id="伊内丝" name="伊内丝">
+                                <label for="伊内丝">伊内丝</label>
+                            </div>
+                            <div>
+                                <input type="checkbox" id="乌尔比安" name="乌尔比安">
+                                <label for="乌尔比安">乌尔比安</label>
+                            </div>
+                            <div>
+                                <input type="checkbox" id="妮芙" name="妮芙">
+                                <label for="妮芙">妮芙</label>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -440,7 +452,6 @@
         document.addEventListener('DOMContentLoaded', () => {
             const bossfight = document.querySelector('.bossfight');
             const checks = bossfight.querySelectorAll('.check');
-        
             checks.forEach(check => {
                 check.addEventListener('click', () => {
                     checks.forEach(c => c.classList.remove('checked'));

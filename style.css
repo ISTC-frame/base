@@ -53,7 +53,7 @@ h2 {
     width: 100vw;
     height: 100vh;
     z-index: -2;
-    background-image: url(assets/HD/bg_zone_2.png);
+    background-image: url(assets/HD/bg_zone_1.png);
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
@@ -266,15 +266,23 @@ h2 {
 .ban-weight {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
+    justify-content: flex-start;
     > div {
         display: flex;
         justify-content: center;
         align-items: center;
+        padding-right: .3rem;
+        font-family:sans-serif;
+    }
+    > label, > .no-wrap label {
+        font-family: 'Bender','Noto Serif SC', serif;
+        font-size: 1.1rem;
+        font-weight: bold;
     }
 }
 .special-enemy,.temp-recruit,.limited-check {
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
     gap: 0rem;
 }
@@ -369,6 +377,7 @@ h2 {
     position: relative;
     > .counter-box {
         position: relative;
+        background-size: contain;
         &::after {
             content: '';
             position: absolute;
@@ -383,6 +392,9 @@ h2 {
         &.crowd {
             background-image: url(assets/SD/crowd.png);
             background-size: 88%;
+        }
+        &.babel {
+            background-image: url(assets/SD/babel.png);
         }
     }
 }
@@ -481,14 +493,22 @@ label {
     height: 4rem;
     position: relative;
     display: flex;
-    justify-content: center;
+    justify-content:  space-between;
     align-items: center;
     font-size: 1rem;
-    padding: 0 .4rem 0 0;
+    padding: 0;
     cursor: pointer;
     outline: 2px solid #333;
     box-shadow: inset 0 0 0 2px #333;
     color: #000;
+    > label {
+        position: absolute;
+        left: 3px;
+        top: 0rem;
+        color: #fff;
+        letter-spacing: -2px;
+        text-shadow: 0 0 3px black, 0 0 3px black, 0 0 3px black, 0 0 6px black, 0 0 6px black;
+    }
     &::after {
         content: '';
         position: absolute;
@@ -503,7 +523,15 @@ label {
         transition: opacity 0s;
     }
     > input {
-        width: 50%;
+        width: 90%;
+        height: 90%;
+        padding-left: 1rem;
+        background: transparent;
+        border: none;
+        font-family: 'Bender', serif;
+        font-size: 2rem;
+        color: #eee2b8;
+        text-shadow: 0 0 2px black, 0 0 2px black, 0 0 2px black;
     }
     > div {
         flex-shrink: 0;
@@ -525,11 +553,12 @@ label {
     background-size: 85%;
     background-image: url(assets/SD/rogue_4_grow_icon_atk_inactive.png);
 }
+.no-wrap {
+    display: inline-flex; align-items: center; gap: 0.5rem; margin-top: .25rem;
+}
 input[type="checkbox"] + label {
     transition: color .05s;
 }
-
-/* 勾选后的复选框样式 */
 input[type="checkbox"]:checked + label {
     color: #eee2b8;
     text-shadow: 0 0 4px black,0 0 4px black,0 0 4px black;
