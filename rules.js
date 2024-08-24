@@ -497,6 +497,7 @@ function calcBonus() {
     let weight = getWeight();
 
     let finalScore = (originScore + checkBonus + operationBonus + specialBonus) * weight;
+    finalScore = parseFloat(finalScore.toFixed(4));
     let outputScore =`最终分数：[${originScore} + ${checkBonus} + (${operationBonus}) + ${specialBonus}) * ${weight}] = ${finalScore}`;
     //console.log(`最终分数：(${originScore} + ${checkBonus} + ${operationBonus} + ${specialBonus}) * ${weight} = ${finalScore}`);
     $.q('.final-score').textContent = outputScore;
