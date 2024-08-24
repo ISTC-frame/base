@@ -4,7 +4,7 @@
     font-weight: normal;
     font-style: normal;
 
-    src: url('assets/fonts/Bender.otf') format('opentype');
+    src: url(assets/Bender.otf) format('opentype');
 }
 @font-face {
     font-family: 'Huiwen_Ming';

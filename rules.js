@@ -269,7 +269,7 @@ function getCheck() {
             baseScore: 0,
             conditions: {
                 '混乱': 20,
-                '无漏': 30
+                '无漏': 50
             }
         },
         {
@@ -279,7 +279,7 @@ function getCheck() {
                 '金融': 20,
                 '奇观': 20,
                 '拥挤': 20,
-                '混乱': 30,
+                '混乱': 20,
                 '无漏': 50
             }
         },
@@ -497,7 +497,7 @@ function calcBonus() {
     let weight = getWeight();
 
     let finalScore = (originScore + checkBonus + operationBonus + specialBonus) * weight;
-    let outputScore =`最终分数：(${originScore} + ${checkBonus} + ${operationBonus} + ${specialBonus}) * ${weight} = ${finalScore}`;
+    let outputScore =`最终分数：[${originScore} + ${checkBonus} + (${operationBonus}) + ${specialBonus}) * ${weight}] = ${finalScore}`;
     //console.log(`最终分数：(${originScore} + ${checkBonus} + ${operationBonus} + ${specialBonus}) * ${weight} = ${finalScore}`);
     $.q('.final-score').textContent = outputScore;
 }
