@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>集成战略#5计分器</title>
     <link rel="stylesheet" href="style.css" />
+    <link rel="preload" href="rules.json" as="fetch" type="application/json" crossorigin="anonymous">
     <script src="rules.js"></script>
-    <script src="h2c.js"></script>
 </head>
 <body>
     <div id="topbar">
@@ -433,87 +433,6 @@
             <span>V1.0 Designed By 帕琪 From CUG 艰苦朴素 求真务实</span>
         </div>
     </div>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const ewRadio = document.querySelectorAll('input[name="wishdale"]');
-            const banSelect = document.getElementById('ban-select');
-            const DSbox = document.getElementById('doctor-silver');
-            function updateDS() {
-                const isThirdOptionSelected = document.getElementById('option-yee').checked;
-                banSelect.selectedIndex = 0;
-                banSelect.disabled = isThirdOptionSelected;
-                DSbox.disabled = isThirdOptionSelected;
-            }
-            ewRadio.forEach(radio => {
-                radio.addEventListener('change', updateDS);
-            });
-            updateDS();
-        });
-        document.addEventListener('DOMContentLoaded', () => {
-            const bossfight = document.querySelector('.bossfight');
-            const checks = bossfight.querySelectorAll('.check');
-            checks.forEach(check => {
-                check.addEventListener('click', () => {
-                    checks.forEach(c => c.classList.remove('checked'));
-                    check.classList.add('checked');
-                });
-            });
-        });
-        const banSelect = document.getElementById('ban-select');
-        const DSbox = document.getElementById('doctor-silver');
-        const allCheckboxes = document.querySelectorAll('.ban-weight input[type="checkbox"]');
-
-        function updateBan() {
-            const selectedValue = banSelect.value;
-            allCheckboxes.forEach(checkbox => {
-                if (checkbox.id !== 'doctor-silver') {
-                    if (checkbox.id === selectedValue) {
-                        if (!DSbox.checked) {
-                            checkbox.checked = false;
-                            checkbox.disabled = true;
-                        } else {
-                            checkbox.disabled = false;
-                        }
-                    } else {
-                        checkbox.disabled = false;
-                    }
-                }
-            });
-        }
-
-        banSelect.addEventListener('change', updateBan);
-
-        DSbox.addEventListener('change', function() {
-            updateBan();
-        });
-
-        allCheckboxes.forEach(checkbox => {
-            if (checkbox.id !== 'doctor-silver') {
-                checkbox.addEventListener('change', function() {
-                    if (checkbox.id === banSelect.value && !DSbox.checked) {
-                        checkbox.checked = false;
-                        checkbox.disabled = true;
-                    }
-                });
-            }
-        });
-        document.addEventListener('DOMContentLoaded', function() {
-            const chaosCheckboxes = document.querySelectorAll('input[type="checkbox"][value="混乱"]');
-            chaosCheckboxes.forEach(chaosCheckbox => {
-                const noLeakCheckbox = chaosCheckbox.nextElementSibling.nextElementSibling;
-                if (noLeakCheckbox && noLeakCheckbox.value === "无漏") {
-                    chaosCheckbox.addEventListener('change', function() {
-                        if (this.checked) {
-                            noLeakCheckbox.disabled = false;
-                        } else {
-                            noLeakCheckbox.disabled = true;
-                            noLeakCheckbox.checked = false;
-                        }
-                    });
-                    noLeakCheckbox.disabled = !chaosCheckbox.checked;
-                }
-            });
-        });
-    </script>
+    <script src="logic.js"></script>
 </body>
 </html>

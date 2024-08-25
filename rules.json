@@ -232,7 +232,10 @@
         { "name": "mouse", "point": 10 },
         { "name": "six-star", "point": 50 },
         { "name": "five-star", "point": 20 },
-        { "name": "four-star", "point": 10 }
+        { "name": "four-star", "point": 10 },
+        { "name": "crowd", "point": 15 },
+        { "name": "beyond", "point": 20 },
+        { "name": "babel", "point": 20 }
     ],
     "weightKey": [
         { "name": "逻各斯", "weight": 0.05 },

@@ -1,3 +1,27 @@
+let checkBonus = {};
+let weightKey = {};
+let bonusKey = {};
+async function preloadRules() {
+    try {
+        const response = await fetch('rules.json');
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        checkBonus = data.checkBonus || {};
+        weightKey = (data.weightKey || []).reduce((acc, item) => {
+            acc[item.name] = item.weight;
+            return acc;
+        }, {});
+        bonusKey = (data.specialBonus || []).reduce((acc, item) => {
+            acc[item.name] = item.point;
+            return acc;
+        }, {});
+    } catch (error) {
+        console.error('Error loading rules.json:', error);
+    }
+}
+preloadRules();
 var $ = {
     q: (e) => document.querySelector(e),
     qa: (e) => document.querySelectorAll(e),
@@ -152,190 +176,6 @@ function outHole() {
     }
 }
 function getCheck() {
-    const bonusKey = [
-        {
-            name: '溃乱魔典',
-            baseScore: 30,
-            conditions: {}
-        },
-        {
-            name: '大棋一盘',
-            baseScore: 20,
-            conditions: {
-                '苦难': 20
-            }
-        },
-        {
-            name: '猩红甬道',
-            baseScore: 40,
-            conditions: {
-                '天灾': 20,
-                '苦难': 20,
-                '金融': 20
-            }
-        },
-        {
-            name: '假想对冲',
-            baseScore: 30,
-            conditions: {
-                '奇观': 20,
-                '魔王': 20
-            }
-        },
-        {
-            name: '朽败考察',
-            baseScore: 20,
-            conditions: {
-                '金融': 20,
-                '魔王': 20
-            }
-        },
-        {
-            name: '年代断层',
-            baseScore: 0,
-            conditions: {
-                '魔王': 20,
-                '天灾': 20,
-                '金融': 20
-            }
-        },
-        {
-            name: '计划耕种',
-            baseScore: 70,
-            conditions: {
-                '苦难': 20,
-                '奇观': 20
-            }
-        },
-        {
-            name: '寄人城池下',
-            baseScore: 50,
-            conditions: {
-                '金融': 20,
-                '奇观': 20
-            }
-        },
-        {
-            name: '通道封锁',
-            baseScore: 30,
-            conditions: {
-                '奇观': 20
-            }
-        },
-        {
-            name: '无罪净土',
-            baseScore: 30,
-            conditions: {
-                '奇观': 20
-            }
-        },
-        {
-            name: '巫咒同盟',
-            baseScore: 30,
-            conditions: {
-                '奇观': 20
-            }
-        },
-        {
-            name: '残损学院',
-            baseScore: 20,
-            conditions: {}
-        },
-        {
-            name: '谋求共识',
-            baseScore: 70,
-            conditions: {
-                '金融': 20,
-                '奇观': 20
-            }
-        },
-        {
-            name: '神圣的渴求',
-            baseScore: 40,
-            conditions: {
-                '奇观': 20,
-                '天灾': 20
-            }
-        },
-        {
-            name: 'BOSS FIGHT',
-            baseScore: 30,
-            conditions: {
-                '卫国前夜': 30
-            }
-        },
-        {
-            name: '紧急授课',
-            baseScore: 0,
-            conditions: {
-                '混乱': 20,
-                '无漏': 50
-            }
-        },
-        {
-            name: '朝谒',
-            baseScore: 120,
-            conditions: {
-                '金融': 20,
-                '奇观': 20,
-                '拥挤': 20,
-                '混乱': 20,
-                '无漏': 50
-            }
-        },
-        {
-            name: '圣城',
-            baseScore: 170,
-            conditions: {
-                '奇观': 50,
-                '拥挤': 50,
-                '魔王': 50,
-                '混乱': 30,
-                '无漏': 50
-            }
-        },
-        {
-            name: '信号灯',
-            baseScore: 0,
-            conditions: {
-                '紧急': 25,
-                '无漏': 25
-            }
-        },
-        {
-            name: '劫虚济实',
-            baseScore: 0,
-            conditions: {
-                '紧急': 25,
-                '无漏': 25
-            }
-        },
-        {
-            name: '战场侧面',
-            baseScore: 20,
-            conditions: {
-                '紧急': 20
-            }
-        },
-        {
-            name: '鸭速公路',
-            baseScore: 20,
-            conditions: {
-                '无漏': 40
-            }
-        },
-        {
-            name: '叙事邀约',
-            baseScore: 0,
-            conditions: {
-                '无漏': 40
-            }
-        },
-        {
-            name: '狭路相逢',
-            baseScore: 10,
-        }
-    ];
     const checkedNodes = document.querySelectorAll('div.checked');
     const checkInfo = Array.from(checkedNodes).map(node => {
         const counterLabel = node.querySelector('.counter-label');
@@ -352,7 +192,7 @@ function getCheck() {
     function calcChBonus(checkInfo) {
         return function() {
             return checkInfo.reduce((totalBonus, item) => {
-                const bonusItem = bonusKey.find(b => b.name === item.checkname);
+                const bonusItem = checkBonus.find(b => b.name === item.checkname);
                 if (!bonusItem) return totalBonus;
                 let itemBonus = bonusItem.baseScore;
                 let noLeakBonus = 0;
@@ -407,22 +247,9 @@ function getOperation() {
     return calcOpBonus(operationInfo);
 }
 function getSpecial() {
-    const bonusKey = {
-        'duck': 10,
-        'bear': 10,
-        'dog': 10,
-        'mouse': 10,
-        'six-star': 50,
-        'five-star': 20,
-        'four-star': 10,
-        'crowd': 15,
-        'beyond': 20,
-        'babel': 20,
-    };
     const fortuneElement = document.querySelector('.fortune');
     const counterBoxes = fortuneElement.querySelectorAll('.counter-box');
     const specialInfo = [];
-    console.log(specialInfo);
 
     counterBoxes.forEach(counterBox => {
         const secondClass = counterBox.classList[1];
@@ -445,19 +272,6 @@ function getSpecial() {
     return calcSpBonus(specialInfo);
 }
 function getWeight() {
-    const weightKey = {
-        "逻各斯": 0.05,
-        "麒麟R夜刀": 0.05,
-        "傀影": 0.05,
-        "阿斯卡纶": 0.05,
-        "纯烬艾雅法拉": 0.03,
-        "塑心": 0.03,
-        "凯尔希": 0.03,
-        "伊内丝": 0.03,
-        "乌尔比安": 0.03,
-        "妮芙": 0.03,
-        "维什戴尔": 0.0711
-    };
     let totalWeight = 1;
     let ewStatus = 0;
     let checkedStatus = document.querySelector('.bossfight').querySelectorAll('div.checked').length > 0;
