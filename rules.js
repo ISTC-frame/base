@@ -153,7 +153,7 @@ function updateBG() {
         editor.style.backgroundImage = `url('assets/HD/bg_zone_${highestCheckedLevel}.png')`;
     }
 }
-function inHole() {
+function addHole() {
     const limitedCheck = $.q('.limited-check');
     if (limitedCheck) {
         $.c('div', `
@@ -166,7 +166,7 @@ function inHole() {
         });
     }
 }
-function outHole() {
+function rmvHole() {
     const limitedCheck = $.q('.limited-check');
     if (limitedCheck) {
         const counterBox = limitedCheck.querySelector('.counter-box.beyond');
@@ -178,121 +178,87 @@ function outHole() {
 function getCheck() {
     const checkedNodes = document.querySelectorAll('div.checked');
     const checkInfo = Array.from(checkedNodes).map(node => {
-        const counterLabel = node.querySelector('.counter-label');
-        const counterValue = counterLabel ? parseInt(counterLabel.textContent, 10) : 1;
+        const counterValue = parseInt(node.querySelector('.counter-label')?.textContent || '1', 10);
         const checkboxStates = Array.from(node.querySelectorAll('input[type="checkbox"]')).map(checkbox => ({
             id: checkbox.id,
             value: checkbox.value,
             checked: checkbox.checked
         }));
-        const checknameSpan = node.querySelector('span.checkname');
-        const checkname = checknameSpan ? checknameSpan.textContent.trim() : 'defaultCheckname';
+        const checkname = node.querySelector('span.checkname')?.textContent.trim() || 'defaultCheckname';
         return { counterValue, checkboxStates, checkname };
     });
-    function calcChBonus(checkInfo) {
-        return function() {
-            return checkInfo.reduce((totalBonus, item) => {
-                const bonusItem = checkBonus.find(b => b.name === item.checkname);
-                if (!bonusItem) return totalBonus;
-                let itemBonus = bonusItem.baseScore;
-                let noLeakBonus = 0;
-                item.checkboxStates.forEach(checkbox => {
-                    if (checkbox.checked) {
-                        if (checkbox.id === 'era') {
-                            const maxConditionValue = Math.max(...checkbox.value.split('/').map(value => bonusItem.conditions[value] || 0));
-                            itemBonus += maxConditionValue;
-                        } else if (['chaos', 'no-leak', 'emergency'].includes(checkbox.id)) {
-                            const conditionBonus = bonusItem.conditions[checkbox.value] || 0;
-                            itemBonus += conditionBonus;
-                            if (checkbox.id === 'no-leak') {
-                                noLeakBonus = conditionBonus;
-                            }
-                        }
-                    }
-                });
-                if (item.checkname === '鸭速公路') {
-                    totalBonus += itemBonus * item.counterValue;
-                    if (noLeakBonus > 0) {
-                        totalBonus -= noLeakBonus * (item.counterValue - 1);
-                    }
-                } else {
-                    totalBonus += itemBonus;
+    const calculateBonus = checkInfo => checkInfo.reduce((totalBonus, item) => {
+        const bonusItem = checkBonus.find(b => b.name === item.checkname);
+        if (!bonusItem) return totalBonus;
+
+        let itemBonus = bonusItem.baseScore;
+        let noLeakBonus = 0;
+
+        item.checkboxStates.forEach(checkbox => {
+            if (checkbox.checked) {
+                const conditionBonus = bonusItem.conditions[checkbox.value] || 0;
+                itemBonus += checkbox.id === 'era' 
+                    ? Math.max(...checkbox.value.split('/').map(value => bonusItem.conditions[value] || 0))
+                    : conditionBonus;
+
+                if (checkbox.id === 'no-leak') {
+                    noLeakBonus = conditionBonus;
                 }
-                return totalBonus;
-            }, 0);
-        };
-    }
-    const calculateBonus = calcChBonus(checkInfo);
-    return calculateBonus();
+            }
+        });
+        totalBonus += item.checkname === '鸭速公路'
+            ? itemBonus * item.counterValue - noLeakBonus * (item.counterValue - 1)
+            : itemBonus;
+        return totalBonus;
+    }, 0);
+
+    return calculateBonus(checkInfo);
 }
 function getOperation() {
     const operationDiv = document.querySelector('div.operation');
-    const inputs = operationDiv.querySelectorAll('input');
-    const operationInfo = Array.from(inputs).slice(0, 3).map(input => ({
-        value: parseFloat(input.value)
-    }));
+    const inputs = Array.from(operationDiv.querySelectorAll('input')).slice(0, 3);
+    const operationInfo = inputs.map(input => parseFloat(input.value));
 
-    const calcOpBonus = (function() {
-        return function(operationInfo) {
-            let bonus = 0;
-            if (operationInfo[0].value > 60) {
-                bonus -= (operationInfo[0].value - 60) * 50;
-            }
-            bonus += operationInfo[1].value * -15;
-            bonus += operationInfo[2].value * -6;
-            return bonus;
-        };
-    })();
+    const calcOpBonus = (operationInfo) => {
+        let bonus = 0;
+        if (operationInfo[0] > 60) {
+            bonus -= (operationInfo[0] - 60) * 50;
+        }
+        bonus += operationInfo[1] * -15;
+        bonus += operationInfo[2] * -6;
+        return bonus;
+    };
 
     return calcOpBonus(operationInfo);
 }
 function getSpecial() {
-    const fortuneElement = document.querySelector('.fortune');
-    const counterBoxes = fortuneElement.querySelectorAll('.counter-box');
-    const specialInfo = [];
+    const counterBoxes = document.querySelectorAll('.fortune .counter-box');
+    const specialInfo = Array.from(counterBoxes).map(counterBox => ({
+        class: counterBox.classList[1],
+        value: parseInt(counterBox.querySelector('span.counter-label').textContent, 10),
+        depth: parseInt(counterBox.querySelector('span.depth-label')?.textContent || 0, 10)
+    }));
 
-    counterBoxes.forEach(counterBox => {
-        const secondClass = counterBox.classList[1];
-        const counterLabel = parseInt(counterBox.querySelector('span.counter-label').textContent, 10);
-        const depthLabel = parseInt(counterBox.querySelector('span.depth-label')?.textContent || 0, 10);
-        specialInfo.push({ class: secondClass, value: counterLabel, depth: depthLabel });
-    });
-
-    const calcSpBonus = (function() {
-        return function(specialInfo) {
-            return specialInfo.reduce((total, item) => {
-                if (item.class === 'beyond') {
-                    return total + (item.value * bonusKey[item.class] * item.depth);
-                }
-                return total + (bonusKey[item.class] * item.value);
-            }, 0);
-        };
-    })();
-
-    return calcSpBonus(specialInfo);
+    return specialInfo.reduce((total, { class: cls, value, depth }) => {
+        const bonus = bonusKey[cls] * value;
+        return total + (cls === 'beyond' ? bonus * depth : bonus);
+    }, 0);
 }
 function getWeight() {
     let totalWeight = 1;
     let ewStatus = 0;
-    let checkedStatus = document.querySelector('.bossfight').querySelectorAll('div.checked').length > 0;
-    const allSelections = Array.from(document.querySelectorAll('.ban-weight input[type="checkbox"], .ban-weight select, .ban-weight input[type="radio"]'))
-        .map(element => ({
-            id: element.id,
-            checked: element.checked,
-            value: element.value,
-            type: element.type
-        }));
+    const checkedStatus = document.querySelector('.bossfight').querySelectorAll('div.checked').length > 0;
+    const allSelections = Array.from(document.querySelectorAll('.ban-weight input[type="checkbox"], .ban-weight select, .ban-weight input[type="radio"]'));
 
-    allSelections.forEach(selection => {
-        if (selection.type === 'radio' && selection.checked) {
-            ewStatus = (selection.id === 'option-yes') ? -1 : (selection.id === 'option-yee') ? 1 : ewStatus;
-        } else if (selection.type === 'checkbox' && selection.id !== 'doctor-silver' && selection.checked) {
-            totalWeight += weightKey[selection.id] || 0;
-        } else if (selection.type === 'select-one' && selection.value !== 'none') {
-            totalWeight += weightKey[selection.value] || 0;
+    allSelections.forEach(({ id, checked, value, type }) => {
+        if (type === 'radio' && checked) {
+            ewStatus = (id === 'option-yes') ? -1 : (id === 'option-yee') ? 1 : ewStatus;
+        } else if (type === 'checkbox' && id !== 'doctor-silver' && checked) {
+            totalWeight += weightKey[id] || 0;
+        } else if (type === 'select-one' && value !== 'none') {
+            totalWeight += weightKey[value] || 0;
         }
     });
-
     if (ewStatus === -1) {
         totalWeight *= 0.8;
     } else if (ewStatus === 1) {
@@ -301,7 +267,7 @@ function getWeight() {
     if (!checkedStatus) {
         return ewStatus === -1 ? '0.8000' : '1.0000';
     }
-    return Number(totalWeight).toFixed(4);
+    return totalWeight.toFixed(4);
 }
 function calcBonus() {
     let originScore = parseFloat(document.getElementById('origin-score').value);
