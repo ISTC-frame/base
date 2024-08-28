@@ -8,3 +8,4 @@ If you can hardly open the page or load the background images, report to me with
 - 8.23 update: Lots of front-end optimization; Logic completion; Necessary component added.
 - 8.24 update: Statics update, fix font route.
 - 8.25 update: External json import module enabled.
+- 8.28 update: Simplified.
