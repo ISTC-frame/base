@@ -69,7 +69,6 @@ var $ = {
 
         if (!label || parseInt(label.textContent) === 1) {
             target.classList.remove('checked');
-            console.log('remove');
         }
         decrement(target, event);
     };
@@ -215,21 +214,8 @@ function getCheck() {
     return calculateBonus(checkInfo);
 }
 function getOperation() {
-    const operationDiv = document.querySelector('div.operation');
-    const inputs = Array.from(operationDiv.querySelectorAll('input')).slice(0, 3);
-    const operationInfo = inputs.map(input => parseFloat(input.value));
-
-    const calcOpBonus = (operationInfo) => {
-        let bonus = 0;
-        if (operationInfo[0] > 60) {
-            bonus -= (operationInfo[0] - 60) * 50;
-        }
-        bonus += operationInfo[1] * -15;
-        bonus += operationInfo[2] * -6;
-        return bonus;
-    };
-
-    return calcOpBonus(operationInfo);
+    const inputs = Array.from(document.querySelector('div.operation').querySelectorAll('input')).slice(0, 3).map(input => parseFloat(input.value));
+    return (([a, b, c]) => (a > 60 ? (a - 60) * -50 : 0) + b * -15 + c * -6)(inputs);
 }
 function getSpecial() {
     const counterBoxes = document.querySelectorAll('.fortune .counter-box');
@@ -279,6 +265,5 @@ function calcBonus() {
     let finalScore = (originScore + checkBonus + operationBonus + specialBonus) * weight;
     finalScore = parseFloat(finalScore.toFixed(4));
     let outputScore =`最终分数：[${originScore} + ${checkBonus} + (${operationBonus}) + ${specialBonus}) * ${weight}] = ${finalScore}`;
-    //console.log(`最终分数：(${originScore} + ${checkBonus} + ${operationBonus} + ${specialBonus}) * ${weight} = ${finalScore}`);
     $.q('.final-score').textContent = outputScore;
 }
